@@ -3,10 +3,22 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import Button from "./components/Button";
+import FormTheme from "./components/FormTheme";
+import FormThemeReact from "./components/FormThemeReact";
 
 function App() {
   const [count, setCount] = useState(0);
-  const displayLogo = false;
+  const [displayLogo, setDisplayLogo] = useState(true);
+  const [theme, setTheme] = useState({
+    button: {
+      backgroundColor: "#D07AD6",
+    },
+    h1: {
+      backgroundColor: "#FF0000",
+      color: "#FFFF00",
+      border: "1px solid blue",
+    },
+  });
 
   return (
     <>
@@ -30,16 +42,54 @@ function App() {
               <img src={reactLogo} className="logo react" alt="React logo" />
             </a>
           </>
-        ) : false}
+        ) : (
+          false
+        )}
       </div>
-      <h1>Vite + React</h1>
+      <h1 style={theme.h1}>Vite + React</h1>
       <div className="card">
+        <h2>Form using JS (event listener)</h2>
+        <FormTheme
+          initialValues={theme}
+          onSubmit={(data) => {
+            console.log(data);
+            setTheme(data);
+          }}
+        />
+        <h2>Form using React (states)</h2>
+        <FormThemeReact
+          initialValues={theme}
+          onSubmit={(data) => {
+            console.log(data);
+            setTheme(data);
+          }}
+        />
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
         </button>
-        <Button title="Button 1" variant="circle" />
-        <Button variant="rounded">Button 2</Button>
-        <Button title="Button 3">
+        <Button
+          theme={theme.button}
+          title="Button 1"
+          variant="circle"
+          onClick={() => {
+            setTheme({
+              ...theme,
+              h1: {
+                ...theme.h1,
+                backgroundColor: theme.h1.color,
+                color: theme.h1.backgroundColor,
+              },
+            });
+          }}
+        />
+        <Button
+          theme={theme.button}
+          variant="rounded"
+          onClick={() => setDisplayLogo(!displayLogo)}
+        >
+          Toggle Logo
+        </Button>
+        <Button theme={theme.button} title="Button 3">
           <table>
             <tbody>
               <tr>
@@ -48,8 +98,9 @@ function App() {
             </tbody>
           </table>
         </Button>
-        <Button title="Link" variant="text" />
+        <Button theme={theme.button} title="Link" variant="text" />
         <Button
+          theme={theme.button}
           title="P"
           component="p"
           onClick={(event) => console.log(event)}

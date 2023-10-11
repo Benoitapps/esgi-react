@@ -3,6 +3,7 @@ export default function Button({
   variant,
   component: Component = "button",
   onClick,
+  theme = {},
   children
 }) {
   const style = {
@@ -12,6 +13,7 @@ export default function Button({
     borderColor: "black",
     borderStyle: "solid",
     borderWidth: "1px",
+    ...theme
   };
   switch (variant) {
     case "rounded":
