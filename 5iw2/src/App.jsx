@@ -7,17 +7,7 @@ import Button from "./components/Button";
 function App() {
   const [count, setCount] = useState(0);
   const [displayLogo, setDisplayLogo] = useState(false);
-  const [theme, setTheme] = useState({
-    h1: {
-      backgroundColor: "yellow",
-      color: "cyan",
-      border: "2px dashed green",
-    },
-    button: {
-      backgroundColor: "magenta",
-      color: "orange",
-    },
-  });
+  const [theme, setTheme] = useState();
 
   const table = ["a", "b", "c"];
 

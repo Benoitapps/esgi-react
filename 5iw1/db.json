@@ -1,0 +1,18 @@
+{
+  "themes": [
+    {
+      "id": 1,
+      "userId": 1,
+      "theme": {
+        "button": {
+          "backgroundColor": "#D07AD6"
+        },
+        "h1": {
+          "backgroundColor": "#FF0000",
+          "color": "#FFFF00",
+          "border": "1px solid blue"
+        }
+      }
+    }
+  ]
+}

@@ -1,33 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import Button from "./components/Button";
+import MountUnmount from "./MountUnmount";
 
 function App() {
   const [count, setCount] = useState(0);
   const [displayLogo, setDisplayLogo] = useState(false);
-  const [theme, setTheme] = useState({
-    h1: {
-      backgroundColor: "yellow",
-      color: "green",
-      border: "10px dotted red",
-    },
-    button: {
-      backgroundColor: "orange",
-      color: "red",
-    },
-  });
+  const [theme, setTheme] = useState();
 
   const [data, setData] = useState(["coucou", "hello", "salut"]);
 
-  function addElement() {
-    setData([
-      ...data.slice(0, data.length / 2),
-      Date.now(),
-      ...data.slice(data.length / 2),
-    ]);
-  }
+  const addElement = useCallback(
+    function addElement() {
+      setData([
+        ...data.slice(0, data.length / 2),
+        Date.now(),
+        ...data.slice(data.length / 2),
+      ]);
+    },
+    [data]
+  );
 
   function toggleH1() {
     const bgColor = theme.h1.backgroundColor;
@@ -42,6 +36,21 @@ function App() {
       },
     });
   }
+
+  useEffect(() => {
+    fetch("http://localhost:3000/themes?userId=1")
+      .then((res) => res.json())
+      .then((data) => setTheme(data));
+  }, []);
+
+  if (theme === undefined) {
+    return <p>Loading...</p>;
+  }
+
+  if (theme === null) {
+    return <p>Theme not found</p>;
+  }
+
   //React.createElement(
   //  Fragment,
   //  null,
@@ -61,6 +70,7 @@ function App() {
           </a>
         </div>
       )}
+      {!displayLogo && <MountUnmount />}
       {!displayLogo && <p>Pas de logos à afficher</p>}
       {displayLogo ? (
         <div>

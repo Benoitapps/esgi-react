@@ -1,24 +1,62 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import Button from "./components/Button";
 import FormTheme from "./components/FormTheme";
 import FormThemeReact from "./components/FormThemeReact";
+import ListContainer from "./components/ListContainer";
+import TaskList from "./components/Tasks/TaskList";
+import TaskItem from "./components/Tasks/TaskItem";
+import TaskForm from "./components/Tasks/TaskForm";
 
 function App() {
   const [count, setCount] = useState(0);
   const [displayLogo, setDisplayLogo] = useState(true);
-  const [theme, setTheme] = useState({
-    button: {
-      backgroundColor: "#D07AD6",
+  const [theme, setTheme] = useState();
+
+  useEffect(() => {
+    fetch("http://localhost:3000/themes?userId=1")
+      .then((res) => res.json())
+      .then((data) => setTheme(data[0].theme));
+  }, []);
+  const [tasks, setTasks] = useState(
+    JSON.parse(localStorage.getItem("tasks") || "[]")
+  );
+
+  const TaskManager = {
+    get: () => tasks,
+    add: (newItem) => {
+      newItem.id = Date.now();
+      const newTasks = [...tasks, newItem];
+      localStorage.setItem("tasks", JSON.stringify(newTasks));
+      setTasks(newTasks);
     },
-    h1: {
-      backgroundColor: "#FF0000",
-      color: "#FFFF00",
-      border: "1px solid blue",
+    delete: (item) => {
+      const newTasks = tasks.filter((task) => task.id !== item.id);
+      localStorage.setItem("tasks", JSON.stringify(newTasks));
+      setTasks(newTasks);
     },
-  });
+    edit: (item) => {
+      const newTasks = tasks.map((task) => {
+        if (task.id === item.id) {
+          return item;
+        }
+
+        return task;
+      });
+      localStorage.setItem("tasks", JSON.stringify(newTasks));
+      setTasks(newTasks);
+    },
+  };
+
+  if (theme === undefined) {
+    return <p>Loading...</p>;
+  }
+
+  if (theme === null) {
+    return <p>Pas de theme</p>;
+  }
 
   return (
     <>
@@ -108,6 +146,12 @@ function App() {
         <p>
           Edit <code>src/App.jsx</code> and save to test HMR
         </p>
+        <ListContainer
+          container={TaskList}
+          item={TaskItem}
+          form={TaskForm}
+          model={TaskManager}
+        />
       </div>
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more

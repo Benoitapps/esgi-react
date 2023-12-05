@@ -1,0 +1,18 @@
+{
+  "themes": [
+    {
+      "userId": 1,
+      "config": {
+        "h1": {
+          "backgroundColor": "yellow",
+          "color": "cyan",
+          "border": "2px dashed green"
+        },
+        "button": {
+          "backgroundColor": "magenta",
+          "color": "orange"
+        }
+      }
+    }
+  ]
+}
